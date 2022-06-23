@@ -600,12 +600,15 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         return options;
     }
 
-    private WritableMap getImage(final Activity activity, String path) throws Exception {
+    private WritableMap getImage(final Activity activity, String originPath) throws Exception {
         WritableMap image = new WritableNativeMap();
 
-        if (path.startsWith("http://") || path.startsWith("https://")) {
+        if (originPath.startsWith("http://") || originPath.startsWith("https://")) {
             throw new Exception("Cannot select remote files");
         }
+        
+        String path = PhotoBitmapUtils.amendRotatePhoto(originPath, activity);
+        
         BitmapFactory.Options original = validateImage(path);
 
         // if compression options are provided image will be compressed. If none options is provided,
